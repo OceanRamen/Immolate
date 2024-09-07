@@ -6,6 +6,7 @@
 
 Item BRAINSTORM_PACK = Item::RETRY;
 Item BRAINSTORM_TAG = Item::Charm_Tag;
+Item BRAINSTORM_VOUCHER = Item::RETRY;
 long BRAINSTORM_SOULS = 1;
 
 long filter(Instance inst) {
@@ -15,6 +16,13 @@ long filter(Instance inst) {
             return 0;
         }
     }
+    
+    if (BRAINSTORM_VOUCHER != Item::RETRY) {
+        if (inst.nextVoucher(1) != BRAINSTORM_VOUCHER) {
+            return 0;
+        }
+    }
+    
     if (BRAINSTORM_TAG != Item::RETRY) {
         if (inst.nextTag(1) != BRAINSTORM_TAG) {
             return 0;
@@ -37,9 +45,10 @@ long filter(Instance inst) {
     }
 };
 
-IMMOLATE_API std::string brainstorm_cpp(std::string seed, std::string pack, std::string tag, double souls) {
+IMMOLATE_API std::string brainstorm_cpp(std::string seed, std::string voucher, std::string pack, std::string tag, double souls) {
     BRAINSTORM_PACK = stringToItem(pack);
     BRAINSTORM_TAG = stringToItem(tag);
+    BRAINSTORM_VOUCHER = stringToItem(voucher);
     BRAINSTORM_SOULS = souls;
     Search search(filter, seed, 1, 100000000);
     search.exitOnFind = true;
@@ -47,11 +56,12 @@ IMMOLATE_API std::string brainstorm_cpp(std::string seed, std::string pack, std:
 }
 
 extern "C" {
-    IMMOLATE_API const char* brainstorm(const char* seed, const char* pack, const char* tag, double souls) {
+    IMMOLATE_API const char* brainstorm(const char* seed, const char* voucher, const char* pack, const char* tag, double souls) {
         std::string cpp_seed(seed);
         std::string cpp_pack(pack);
+        std::string cpp_voucher(voucher);
         std::string cpp_tag(tag);
-        std::string result = brainstorm_cpp(cpp_seed, cpp_pack, cpp_tag, souls);
+        std::string result = brainstorm_cpp(cpp_seed, cpp_voucher, cpp_pack, cpp_tag, souls);
         
         char* c_result = (char*)malloc(result.length() + 1);
         strcpy(c_result, result.c_str());
