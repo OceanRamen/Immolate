@@ -16,9 +16,9 @@
 #endif
 
 // Declare the functions with IMMOLATE_API
-IMMOLATE_API std::string brainstorm_cpp(std::string seed, std::string pack, std::string tag, double souls);
+IMMOLATE_API std::string brainstorm_cpp(std::string seed, std::string voucher, std::string pack, std::string tag, double souls);
 extern "C" {
-    IMMOLATE_API const char* brainstorm(const char* seed, const char* pack, const char* tag, double souls);
+    IMMOLATE_API const char* brainstorm(const char* seed, const char* voucher, const char* pack, const char* tag, double souls);
     IMMOLATE_API void free_result(const char* result);
 }
 
